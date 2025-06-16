@@ -7,22 +7,26 @@ function saveProducts() {
 }
 
 function addProduct() {
-  const name = document.getElementById("productName").value.trim();
+  const nameInput = document.getElementById("productName");
+  const name = nameInput.value.trim();
   if (name && !products.includes(name)) {
     products.push(name);
     saveProducts();
-    document.getElementById("productName").value = "";
+    nameInput.value = "";
   } else {
     alert("Invalid or duplicate product name.");
   }
 }
 
-function renderProducts() {
+function renderProducts(filtered = null) {
   const container = document.getElementById("productList");
   container.innerHTML = "";
-  products.forEach((product) => {
+  const list = filtered || products;
+  list.forEach((product) => {
+    const productId = encodeURIComponent(product);
     const div = document.createElement("div");
-    div.innerHTML = \`\${product} <input type='number' min='1' placeholder='Qty' id='qty_\${product}' /> <button onclick='addToOrder("\${product}")'>Add to Order</button>\`;
+    div.innerHTML = `${product} <input type='number' min='1' placeholder='Qty' id='qty_${productId}' />
+      <button onclick='addToOrder("${productId}")'>Add to Order</button>`;
     container.appendChild(div);
   });
 }
@@ -30,17 +34,12 @@ function renderProducts() {
 function filterProducts() {
   const term = document.getElementById("searchInput").value.toLowerCase();
   const filtered = products.filter(p => p.toLowerCase().includes(term));
-  const container = document.getElementById("productList");
-  container.innerHTML = "";
-  filtered.forEach((product) => {
-    const div = document.createElement("div");
-    div.innerHTML = \`\${product} <input type='number' min='1' placeholder='Qty' id='qty_\${product}' /> <button onclick='addToOrder("\${product}")'>Add to Order</button>\`;
-    container.appendChild(div);
-  });
+  renderProducts(filtered);
 }
 
-function addToOrder(product) {
-  const qty = document.getElementById("qty_" + product).value;
+function addToOrder(productId) {
+  const product = decodeURIComponent(productId);
+  const qty = document.getElementById("qty_" + productId).value;
   if (qty && qty > 0) {
     orders.push({ product, qty });
     renderOrderList();
@@ -54,7 +53,7 @@ function renderOrderList() {
   container.innerHTML = "<h3>Order List:</h3>";
   orders.forEach((item, i) => {
     const div = document.createElement("div");
-    div.textContent = \`\${i + 1}. \${item.product}- \${item.qty}\`;
+    div.textContent = `${i + 1}. ${item.product} - ${item.qty}`;
     container.appendChild(div);
   });
 }
@@ -62,9 +61,9 @@ function renderOrderList() {
 function generateOrderSummary() {
   const from = document.getElementById("fromInput").value;
   const to = document.getElementById("toInput").value;
-  let summary = "From: " + from + "<br>To: " + to + "<br><br>";
+  let summary = `From: ${from}<br>To: ${to}<br><br>`;
   orders.forEach((item, i) => {
-    summary += \`\${i + 1}. \${item.product}- \${item.qty}<br>\`;
+    summary += `${i + 1}. ${item.product} - ${item.qty}<br>`;
   });
   document.getElementById("orderSummary").innerHTML = summary;
 }
