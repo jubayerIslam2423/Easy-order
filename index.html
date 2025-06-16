@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Easy Order</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🛒 Easy Order</h1>
+    <div class="from-to">
+      <input type="text" id="from" placeholder="From...">
+      <input type="text" id="to" placeholder="To...">
+    </div>
+    <input type="text" id="search" placeholder="Search product...">
+  </header>
+
+  <main>
+    <section class="add-product">
+      <input type="text" id="productName" placeholder="Product name">
+      <input type="number" id="productQty" placeholder="Quantity">
+      <button onclick="addProduct()">Add Product</button>
+    </section>
+
+    <section>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="actions">
+      <button onclick="generatePDF()">Export PDF</button>
+      <button onclick="exportExcel()">Export Excel</button>
+      <button onclick="window.print()">Print</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
