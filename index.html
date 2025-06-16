@@ -1,51 +1,105 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Easy Order</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, button, textarea { margin: 5px 0; padding: 8px; width: 100%; }
+    .product-entry { margin: 5px 0; }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🛒 Easy Order</h1>
-    <div class="from-to">
-      <input type="text" id="from" placeholder="From...">
-      <input type="text" id="to" placeholder="To...">
-    </div>
-    <input type="text" id="search" placeholder="Search product...">
-  </header>
+  <h2>Easy Order</h2>
 
-  <main>
-    <section class="add-product">
-      <input type="text" id="productName" placeholder="Product name">
-      <input type="number" id="productQty" placeholder="Quantity">
-      <button onclick="addProduct()">Add Product</button>
-    </section>
+  <h3>➕ Add Product</h3>
+  <input id="productInput" type="text" placeholder="Enter product name" />
+  <button onclick="addProduct()">Add Product</button>
 
-    <section>
-      <table id="productTable">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
+  <h3>📦 Saved Products</h3>
+  <input id="searchInput" type="text" placeholder="Search products..." oninput="searchProducts()" />
+  <div id="productList"></div>
 
-    <section class="actions">
-      <button onclick="generatePDF()">Export PDF</button>
-      <button onclick="exportExcel()">Export Excel</button>
-      <button onclick="window.print()">Print</button>
-    </section>
-  </main>
+  <h3>🧾 Create Order</h3>
+  <input id="fromInput" type="text" placeholder="From" />
+  <input id="toInput" type="text" placeholder="To" />
+  <div id="orderList"></div>
+  <button onclick="generateSummary()">🖨️ Generate Summary</button>
 
-  <script src="script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <h3>📋 Order Summary</h3>
+  <textarea id="summaryText" rows="10" readonly></textarea>
+  <button onclick="window.print()">🖨️ Print</button>
+
+  <script>
+    const productInput = document.getElementById('productInput');
+    const searchInput = document.getElementById('searchInput');
+    const productList = document.getElementById('productList');
+    const orderList = document.getElementById('orderList');
+    const summaryText = document.getElementById('summaryText');
+
+    const savedProducts = JSON.parse(localStorage.getItem('products') || '[]');
+    const orderItems = [];
+
+    function updateProductDisplay(filter = '') {
+      productList.innerHTML = '';
+      savedProducts
+        .filter(p => p.toLowerCase().includes(filter.toLowerCase()))
+        .forEach((product, index) => {
+          const div = document.createElement('div');
+          div.className = 'product-entry';
+          div.innerHTML = `${product} <input type="number" placeholder="Qty" id="qty_${index}" style="width:60px;" />
+            <button onclick="addToOrder('${product}', ${index})">Add</button>`;
+          productList.appendChild(div);
+        });
+    }
+
+    function addProduct() {
+      const product = productInput.value.trim();
+      if (product && !savedProducts.includes(product)) {
+        savedProducts.push(product);
+        localStorage.setItem('products', JSON.stringify(savedProducts));
+        updateProductDisplay();
+      }
+      productInput.value = '';
+    }
+
+    function searchProducts() {
+      updateProductDisplay(searchInput.value);
+    }
+
+    function addToOrder(product, index) {
+      const qty = document.getElementById('qty_' + index).value;
+      if (qty) {
+        orderItems.push({ product, qty });
+        renderOrder();
+      }
+    }
+
+    function renderOrder() {
+      orderList.innerHTML = '';
+      orderItems.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.textContent = `${item.product} - ${item.qty}`;
+        orderList.appendChild(div);
+      });
+    }
+
+    function generateSummary() {
+      const from = document.getElementById('fromInput').value;
+      const to = document.getElementById('toInput').value;
+      let text = `From: ${from}
+To: ${to}
+
+`;
+      orderItems.forEach(item => {
+        text += `${item.product} - ${item.qty}
+`;
+      });
+      summaryText.value = text;
+    }
+
+    updateProductDisplay();
+  </script>
 </body>
 </html>
