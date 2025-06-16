@@ -7,26 +7,33 @@ function saveProducts() {
 }
 
 function addProduct() {
-  const nameInput = document.getElementById("productName");
-  const name = nameInput.value.trim();
-  if (name && !products.includes(name)) {
-    products.push(name);
-    saveProducts();
-    nameInput.value = "";
-  } else {
-    alert("Invalid or duplicate product name.");
+  const input = document.getElementById("productName");
+  const name = input.value.trim();
+  if (name === "") {
+    alert("Please enter a product name");
+    return;
   }
+  if (products.includes(name)) {
+    alert("This product already exists");
+    return;
+  }
+  products.push(name);
+  saveProducts();
+  input.value = "";
 }
 
 function renderProducts(filtered = null) {
+  const list = filtered || products;
   const container = document.getElementById("productList");
   container.innerHTML = "";
-  const list = filtered || products;
   list.forEach((product) => {
-    const productId = encodeURIComponent(product);
+    const safeId = encodeURIComponent(product);
     const div = document.createElement("div");
-    div.innerHTML = `${product} <input type='number' min='1' placeholder='Qty' id='qty_${productId}' />
-      <button onclick='addToOrder("${productId}")'>Add to Order</button>`;
+    div.innerHTML = `
+      ${product} 
+      <input type="number" id="qty_${safeId}" placeholder="Qty" min="1" />
+      <button onclick="addToOrder('${safeId}')">Add to Order</button>
+    `;
     container.appendChild(div);
   });
 }
@@ -39,13 +46,15 @@ function filterProducts() {
 
 function addToOrder(productId) {
   const product = decodeURIComponent(productId);
-  const qty = document.getElementById("qty_" + productId).value;
-  if (qty && qty > 0) {
-    orders.push({ product, qty });
-    renderOrderList();
-  } else {
-    alert("Please enter valid quantity.");
+  const qtyInput = document.getElementById("qty_" + productId);
+  const qty = qtyInput.value;
+  if (!qty || qty <= 0) {
+    alert("Please enter a valid quantity");
+    return;
   }
+  orders.push({ product, qty });
+  renderOrderList();
+  qtyInput.value = ""; // clear qty input after adding
 }
 
 function renderOrderList() {
