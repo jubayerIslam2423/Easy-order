@@ -1,0 +1,18 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+input {
+  padding: 5px;
+  margin: 5px;
+}
+button {
+  padding: 6px 12px;
+  margin: 5px;
+}
+#productList, #orderList, #orderSummary {
+  margin-top: 15px;
+}
