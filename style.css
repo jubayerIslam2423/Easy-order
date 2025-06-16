@@ -1,2 +1,57 @@
-/* Easy Order App Styles */
-body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 5px #ccc;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 48%;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+#searchResults div {
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+#searchResults div:hover {
+  background-color: #f1f1f1;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
