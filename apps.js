@@ -115,7 +115,7 @@ function printSummary() {
         }
         body {
           font-family: Arial, sans-serif;
-          font-size: 16pt;
+          font-size: 26pt;
           line-height: 1.6;
           padding: 20px;
         }
