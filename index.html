@@ -18,7 +18,10 @@
     <input type="text" id="searchInput" placeholder="Search product..." oninput="filterProducts()" />
   </div>
 
-  <div id="productList"></div>
+  <div id="productSection">
+    <h2>Products</h2>
+    <div id="productList"></div>
+  </div>
 
   <div class="form-group">
     <input type="text" id="fromInput" placeholder="From" />
@@ -27,14 +30,17 @@
 
   <div id="orderList"></div>
 
-  <div class="buttons">
+  <div class="form-group">
     <button onclick="generateOrderSummary()">Generate Summary</button>
+  </div>
+
+  <div id="orderSummary"></div>
+
+  <div class="buttons">
     <button onclick="printSummary()">Print</button>
     <button onclick="downloadPDF()">Download PDF</button>
     <button onclick="downloadExcel()">Download Excel</button>
   </div>
-
-  <div id="orderSummary"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="apps.js"></script>
