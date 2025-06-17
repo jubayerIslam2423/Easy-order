@@ -101,21 +101,64 @@ function generateOrderSummary() {
 }
 
 function printSummary() {
-  const printWindow = window.open('', '', 'height=700,width=800');
-  printWindow.document.write('<html><head><title>Order Summary</title><style>body{font-family:sans-serif;padding:20px;}@media print{body{margin:0;}}</style></head><body>');
-  printWindow.document.write(document.getElementById("orderSummary").innerHTML);
-  printWindow.document.write('</body></html>');
+  const summaryHTML = document.getElementById("orderSummary").innerHTML;
+  const printWindow = window.open('', '', 'height=842,width=595'); // A4 size
+
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Order Summary</title>
+      <style>
+        @page {
+          size: A4;
+          margin: 40px;
+        }
+        body {
+          font-family: Arial, sans-serif;
+          font-size: 16pt;
+          line-height: 1.6;
+          padding: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      ${summaryHTML}
+    </body>
+    </html>
+  `);
   printWindow.document.close();
+  printWindow.focus();
   printWindow.print();
 }
 
 function downloadPDF() {
-  const summary = document.getElementById("orderSummary").innerHTML;
-  const blob = new Blob([summary], { type: "application/pdf" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "order_summary.pdf";
-  link.click();
+  const summaryHTML = document.getElementById("orderSummary").innerHTML;
+  const printWindow = window.open('', '', 'height=842,width=595'); // A4: 595x842pt
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Order Summary PDF</title>
+      <style>
+        @page {
+          size: A4;
+          margin: 40px;
+        }
+        body {
+          font-family: Arial, sans-serif;
+          font-size: 16pt;
+          line-height: 1.6;
+          padding: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      ${summaryHTML}
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
 }
 
 function downloadExcel() {
